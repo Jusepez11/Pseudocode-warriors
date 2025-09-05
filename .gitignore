@@ -1,7 +1,2 @@
-src/api/dependencies/secrets/testspreadsheet-257500-firebase-adminsdk-8dlsm-1288dc11ca.json
-.idea/inspectionProfiles/profiles_settings.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/Pseudocode-warriors.iml
-.idea/vcs.xml
+.idea
 src/api/dependencies/secrets/secret.json

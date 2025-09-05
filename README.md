@@ -9,14 +9,14 @@ Group information available in the [GROUP-INFO](./GROUP-INFO) file.
 
 
 ### Installing necessary packages:  
-* `pip install fastapi`
-* `pip install "uvicorn[standard]"`  
-* `pip install httpx`  
-* `pip install firebase-admin`
-* `pip install fastapi uvicorn pytest firebase-admin`
+* `pip install -r requirements.txt`
 
 ### Run the server:
 `uvicorn api.main:app --reload`
 
 ### Test API by built-in docs:
 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+### Development Notes
+Please format your code before each commit by right-clicking the project folder and selecting `Reformat Code`.
+Set your IDE to use Tabs (width of 4).
