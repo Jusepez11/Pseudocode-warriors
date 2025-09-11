@@ -12,7 +12,7 @@ Group information available in the [GROUP-INFO](./GROUP-INFO) file.
 * `pip install -r requirements.txt`
 
 ### Run the server:
-`uvicorn api.main:app --reload`
+`python ./run.py`
 
 ### Test API by built-in docs:
 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)

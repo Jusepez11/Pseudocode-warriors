@@ -1,2 +1,8 @@
 .idea
 src/api/dependencies/secrets/secret.json
+*.db
+.env
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
