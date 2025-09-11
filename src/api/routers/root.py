@@ -5,17 +5,20 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from starlette import status
 
+from src.api.controllers import user as user_controller
 from src.api.dependencies.database import get_db
 from src.api.schemas.user import User, UserCreate
 from src.api.util.auth import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_active_user
-from src.api.controllers import user as user_controller
 
 router = APIRouter(tags=["root"])
 
 
 @router.post("/login", response_model=dict)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-	"""Authenticate user and return access token."""
+	"""Authenticate user credentials and return a JWT access token.
+
+	Expects form-data with 'username' and 'password'. Returns {"access_token": ..., "token_type": "bearer"}.
+	"""
 	user = user_controller.authenticate_user(db, form_data.username, form_data.password)
 	if not user:
 		raise HTTPException(
@@ -33,7 +36,10 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
 @router.post("/register", response_model=User)
 async def register_user(user: UserCreate, db: Session = Depends(get_db)):
-	"""Register a new user."""
+	"""Register a new user if the username and email are not already taken.
+
+	Returns the newly created user's public data.
+	"""
 	# Check if user already exists
 	db_user = user_controller.get_user_by_username(db, username=user.username)
 	if db_user:
@@ -47,10 +53,12 @@ async def register_user(user: UserCreate, db: Session = Depends(get_db)):
 	return User(
 		username=new_user.username,
 		email=new_user.email,
-		is_active=new_user.is_active
+		is_active=new_user.is_active,
+		role=new_user.role
 	)
 
 
 @router.get("/demo")
 async def demo_protected_route(current_user: User = Depends(get_current_active_user)):
+	"""A small protected demo route to verify authentication."""
 	return {"message": f"Hello {current_user.username}, this is a protected route!"}

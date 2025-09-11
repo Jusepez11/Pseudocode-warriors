@@ -16,6 +16,7 @@ app.add_middleware(
 	allow_headers=["*"],
 )
 
+# Ensure DB tables are created (SQLAlchemy models bound to Base)
 Base.metadata.create_all(bind=engine)
 
 app.include_router(root_router.router)
