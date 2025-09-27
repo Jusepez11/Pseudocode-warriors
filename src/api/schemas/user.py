@@ -5,27 +5,31 @@ from pydantic import BaseModel
 from src.api.models.user import Role
 
 
-class User(BaseModel):
+class UserBase(BaseModel):
 	"""Public representation of a user returned by the API."""
 	username: str
-	email: Optional[str] = None
-	is_active: Optional[bool] = None
+	email: str
+	is_active: str
 	role: Role = Role.User
 
-	class Config:
-		orm_mode = True
+class UserCreate(UserBase):
+	"""Payload used to create a new user account."""
+	pass
 
+class UserUpdate(BaseModel):
+    """Public representation of a user returned by the API."""
+    username: Optional[str] = None
+    email: Optional[str] = None
+    is_active: Optional[str] = None
+    role: Role = Role.User
 
-class UserInDB(User):
+class UserRead(UserBase):
+    id: int
+
+    model_config = {
+        "from_attributes": True
+    }
+
+class UserInDB(UserBase):
 	"""Internal model including stored hashed password (not returned by default)."""
 	hashed_password: str
-
-
-class UserCreate(BaseModel):
-	"""Payload used to create a new user account."""
-	username: str
-	email: str
-	password: str
-
-	class Config:
-		orm_mode = True
