@@ -8,7 +8,7 @@ from src.api.schemas.recipe import RecipeCreate, RecipeUpdate, RecipeRead
 router = APIRouter(prefix="/recipes", tags=["Recipes"])
 
 
-@router.post("/", response_model=RecipeRead)
+@router.post("/", response_model=RecipeCreate)
 def create(request: RecipeCreate, db: Session = Depends(get_db)):
 	return controller.create(db, request)
 
@@ -33,7 +33,7 @@ def read_one(recipe_id: int, db: Session = Depends(get_db)):
 	return controller.read_one(db, recipe_id)
 
 
-@router.put("/{recipe_id}", response_model=RecipeRead)
+@router.put("/{recipe_id}", response_model=RecipeUpdate)
 def update(recipe_id: int, request: RecipeUpdate, db: Session = Depends(get_db)):
 	return controller.update(db, recipe_id, request)
 

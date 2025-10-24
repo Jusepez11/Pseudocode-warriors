@@ -8,7 +8,7 @@ from src.api.schemas.pantry_ingredient import PantryIngredientCreate, PantryIngr
 router = APIRouter(prefix="/pantryingredient", tags=["Pantry Ingredient"])
 
 
-@router.post("/", response_model=PantryIngredientRead)
+@router.post("/", response_model=PantryIngredientCreate)
 def create(request: PantryIngredientCreate, db: Session = Depends(get_db)):
 	return controller.create(db, request)
 
@@ -23,7 +23,7 @@ def read_one(pantry_ingredient_id: int, db: Session = Depends(get_db)):
 	return controller.read_one(db, pantry_ingredient_id)
 
 
-@router.put("/{pantry_ingredient_id}", response_model=PantryIngredientRead)
+@router.put("/{pantry_ingredient_id}", response_model=PantryIngredientUpdate)
 def update(pantry_ingredient_id: int, request: PantryIngredientUpdate, db: Session = Depends(get_db)):
 	return controller.update(db, pantry_ingredient_id, request)
 
