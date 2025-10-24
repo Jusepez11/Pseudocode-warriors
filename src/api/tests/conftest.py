@@ -1,24 +1,26 @@
+import os
 import pytest
-from sqlalchemy import MetaData
+from fastapi.testclient import TestClient
 
-from src.api.dependencies.database import SessionLocal, engine
+os.environ.setdefault("DATABASE_URL", "sqlite:///:memory:")
+
+from src.api.dependencies.database import SessionLocal, engine, Base
+from src.api.main import app
 from src.api.models import User, Ingredient, Recipe, PantryIngredient
 from src.api.seed import seed_if_needed
 
 
-@pytest.fixture(scope="function", autouse=True)
-def clean_db():
-	meta = MetaData()
-	meta.reflect(bind=engine)
-	with engine.connect() as conn:
-		for table in reversed(meta.sorted_tables):
-			conn.execute(table.delete())
-	yield
+@pytest.fixture(scope="module")
+def client():
+	return TestClient(app)
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def test_seed_data():
+	Base.metadata.create_all(bind=engine)
 	seed_if_needed()
+	yield
+	Base.metadata.drop_all(bind=engine)
 
 
 def test_ensure_db_nonempty(test_seed_data):
