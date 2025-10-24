@@ -8,7 +8,7 @@ from src.api.schemas.ingredient import IngredientCreate, IngredientUpdate, Ingre
 router = APIRouter(prefix="/ingredient", tags=["Ingredients"])
 
 
-@router.post("/", response_model=IngredientCreate)
+@router.post("/", response_model=IngredientRead)
 def create(request: IngredientCreate, db: Session = Depends(get_db)):
 	return controller.create(db, request)
 
@@ -23,7 +23,7 @@ def read_one(ingredient_id: int, db: Session = Depends(get_db)):
 	return controller.read_one(db, ingredient_id)
 
 
-@router.put("/{ingredient_id}", response_model=IngredientUpdate)
+@router.put("/{ingredient_id}", response_model=IngredientRead)
 def update(ingredient_id: int, request: IngredientUpdate, db: Session = Depends(get_db)):
 	return controller.update(db, ingredient_id, request)
 
