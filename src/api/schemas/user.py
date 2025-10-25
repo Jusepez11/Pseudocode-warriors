@@ -39,3 +39,11 @@ class UserUpdate(BaseModel):
 class UserRead(BaseModel):
 	"""Public representation of a user returned by the API."""
 	id: int
+	username: str
+	email: str
+	is_active: bool
+	role: Role
+
+	model_config = {
+		"from_attributes": True
+	}

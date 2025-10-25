@@ -4,16 +4,12 @@ from fastapi import HTTPException, status, Response
 from passlib.context import CryptContext
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
+from fuzzywuzzy import fuzz
 
 from src.api.models.ingredient import Ingredient as Model
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 
 def create(db: Session, request):
-	if not request.id:
-		request.id = None
-
 	new_item = Model(
 		name=request.name,
 	)
@@ -36,6 +32,35 @@ def read_all(db: Session, skip: int = 0, limit: int = 100) -> List[type[Model]]:
 		error = str(e.__dict__['orig'])
 		raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
 	return result
+
+
+def search(db: Session, query: str, threshold: int = 60) -> List[type[Model]]:
+	"""Search for ingredients by name with fuzzy matching."""
+	try:
+		# Get all ingredients
+		all_ingredients = db.query(Model).all()
+
+		results = []
+		for ingredient in all_ingredients:
+			# Calculate fuzzy match score
+			score = fuzz.partial_ratio(query.lower(), ingredient.name.lower())
+
+			# Only include if above threshold
+			if score >= threshold:
+				results.append({
+					'ingredient': ingredient,
+					'score': score
+				})
+
+		# Sort by score (highest first)
+		results.sort(key=lambda x: x['score'], reverse=True)
+
+		# Return just the ingredients, limited to 50
+		return [r['ingredient'] for r in results][:50]
+
+	except SQLAlchemyError as e:
+		error = str(e.__dict__['orig'])
+		raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
 
 
 def read_one(db: Session, id):

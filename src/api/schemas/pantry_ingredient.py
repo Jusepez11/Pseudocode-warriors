@@ -23,6 +23,7 @@ class PantryIngredientUpdate(BaseModel):
 
 class PantryIngredientRead(PantryIngredientBase):
 	id: int
+	ingredient_name: Optional[str] = None
 
 	model_config = {
 		"from_attributes": True

@@ -7,7 +7,7 @@ from starlette import status
 
 from src.api.controllers import user as user_controller
 from src.api.dependencies.database import get_db
-from src.api.schemas.user import User, UserCreate
+from src.api.schemas.user import User, UserCreate, UserRead
 from src.api.util.auth import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_active_user
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
@@ -62,3 +62,14 @@ async def register_user(user: UserCreate, db: Session = Depends(get_db)):
 async def demo_protected_route(current_user: User = Depends(get_current_active_user)):
 	"""A small protected demo route to verify authentication."""
 	return {"message": f"Hello {current_user.username}, this is a protected route!"}
+
+
+@router.get("/me", response_model=UserRead)
+async def get_current_user_info(current_user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
+	"""Get current authenticated user's info including user ID."""
+	db_user = user_controller.read_user_by_username(db, username=current_user.username)
+	if not db_user:
+		raise HTTPException(status_code=404, detail="User not found")
+
+	return UserRead.model_validate(db_user)
+

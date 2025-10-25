@@ -19,6 +19,11 @@ def read_all(db: Session = Depends(get_db)):
 	return controller.read_all(db)
 
 
+@router.get("/search/", response_model=list[IngredientRead])
+def search(query: str, threshold: int = 60, db: Session = Depends(get_db)):
+	return controller.search(db, query, threshold)
+
+
 @router.get("/{ingredient_id}", response_model=IngredientRead)
 def read_one(ingredient_id: int, db: Session = Depends(get_db)):
 	return controller.read_one(db, ingredient_id)

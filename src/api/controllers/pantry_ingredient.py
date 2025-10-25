@@ -1,19 +1,14 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import HTTPException, status, Response
-from passlib.context import CryptContext
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from src.api.models.pantry_ingredient import PantryIngredient as Model
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from src.api.models.user import User as UserModel
 
 
 def create(db: Session, request):
-	if not request.id:
-		request.id = None
-
 	new_item = Model(
 		user_id=request.user_id,
 		ingredient_id=request.ingredient_id,
@@ -32,9 +27,26 @@ def create(db: Session, request):
 	return new_item
 
 
-def read_all(db: Session, skip: int = 0, limit: int = 100) -> List[type[Model]]:
+def read_all(db: Session, skip: int = 0, limit: int = 100, user_id: Optional[int] = None) -> List[type[Model]]:
 	try:
-		result = db.query(Model).offset(skip).limit(limit).all()
+		query = db.query(Model)
+		if user_id is not None:
+			query = query.filter(Model.user_id == user_id)
+		result = query.offset(skip).limit(limit).all()
+	except SQLAlchemyError as e:
+		error = str(e.__dict__['orig'])
+		raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+	return result
+
+
+def read_by_user(db: Session, username: str) -> List[type[Model]]:
+	"""Get all pantry ingredients for a specific user by username."""
+	try:
+		user = db.query(UserModel).filter(UserModel.username == username).first()
+		if not user:
+			raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+		result = db.query(Model).options(joinedload(Model.ingredient)).filter(Model.user_id == user.id).all()
 	except SQLAlchemyError as e:
 		error = str(e.__dict__['orig'])
 		raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)

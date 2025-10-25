@@ -9,8 +9,6 @@ from fuzzywuzzy import fuzz
 from src.api.models.recipe import Recipe as Model
 from src.api.models.ingredient import Ingredient
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 
 def create(db: Session, request):
 	if not request.id:

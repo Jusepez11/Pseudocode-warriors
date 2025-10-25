@@ -1,12 +1,10 @@
 from typing import Optional, List
 
-from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from src.api.models.user import User
 from src.api.schemas.user import UserCreate, UserUpdate
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from src.api.util.auth import pwd_context
 
 
 def read_user_by_id(db: Session, user_id: int) -> Optional[User]:
