@@ -10,6 +10,9 @@ from src.api.models import User, Ingredient, Recipe, PantryIngredient
 from src.api.seed import seed_if_needed
 
 
+access_token = None
+
+
 @pytest.fixture(scope="module")
 def client():
 	return TestClient(app)
@@ -21,6 +24,23 @@ def test_seed_data():
 	seed_if_needed()
 	yield
 	Base.metadata.drop_all(bind=engine)
+
+
+@pytest.fixture(scope="module")
+def authenticate_demo_user(client):
+	global access_token
+	if access_token is None:
+		login_data = {
+			"username": "test",
+			"password": "testpassword"
+		}
+
+		response = client.post("/auth/login", data=login_data)
+		assert response.status_code == 200
+		data = response.json()
+		access_token = data["access_token"]
+
+	return {"Authorization": f"Bearer {access_token}"}
 
 
 def test_ensure_db_nonempty(test_seed_data):
