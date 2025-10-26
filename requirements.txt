@@ -1,5 +1,6 @@
 python-dotenv
 pydantic
+email-validator
 uvicorn[standard]
 fastapi
 sqlalchemy

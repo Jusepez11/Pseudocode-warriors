@@ -17,7 +17,8 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 	"""Authenticate user credentials and return a JWT access token.
 
-	Expects form-data with 'username' and 'password'. Returns {"access_token": ..., "token_type": "bearer"}.
+	Expects form-data with 'username' (can be username or email) and 'password'.
+	Returns {"access_token": ..., "token_type": "bearer"}.
 	"""
 	user = user_controller.authenticate_user(db, form_data.username, form_data.password)
 	if not user:

@@ -1,54 +1,587 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css");
 
-*{box-sizing:border-box;margin:0;padding:0}
-img{max-width:100%;display:block}
-a{text-decoration:none;color:inherit}
-
-body{
-  font-family: "Poppins", system-ui, Arial, sans-serif;
-  background:#0e0f12;
-  color:#f5f7fb;
-  line-height:1.5;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-.wrap{max-width:1100px;margin:0 auto;padding:24px}
-.muted{color:#b7bfd3}
-.chip{display:inline-block;background:rgba(255,255,255,.08);padding:6px 10px;border-radius:999px;font-size:12px}
+/* Image element: makes images responsive and block-level */
+img {
+    max-width: 100%;
+    display: block;
+}
 
-header{position:sticky;top:0;background:rgba(14,15,18,.8);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08);z-index:10}
-.bar{display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
-nav{display:flex;flex-wrap:wrap;gap:10px}
-nav a{padding:8px 12px;border-radius:8px}
-nav a:hover{background:rgba(255,255,255,.08)}
+/* Link styling: removes underlines and inherits color */
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
-.hero{padding:48px 0;display:grid;gap:16px;text-align:center}
-.hero h1{font-size:36px}
-.hero p{color:#b7bfd3}
-.search{display:flex;gap:10px;justify-content:center;margin-top:12px}
-.search input{width:100%;max-width:520px;padding:12px 14px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.06);color:#f5f7fb}
-.search button{padding:12px 16px;border:0;border-radius:10px;background:#38bdf8;color:#071018;font-weight:600;cursor:pointer}
+/* Global body styling: sets background, text color, and font */
+body {
+    font-family: "Poppins", system-ui, Arial, sans-serif;
+    background: #0e0f12;
+    color: #f5f7fb;
+    line-height: 1.5;
+}
 
-.grid{display:grid;gap:16px}
-.grid.auto{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:16px}
-.card h3{font-size:16px;margin-top:10px}
-.card p{color:#b7bfd3;font-size:14px;margin-top:4px}
+/* Main layout wrapper for centered content */
+.wrap {
+    max-width: 1250px; /* widened for more nav room */
+    margin: 0 auto;
+    padding: 24px;
+}
 
-section{padding:28px 0}
-.section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.section-title h2{font-size:20px}
-.link{font-size:14px;color:#7ad7ff}
+/* Muted text color for secondary content */
+.muted {
+    color: #b7bfd3;
+}
 
-footer{margin-top:32px;padding:24px 0;border-top:1px solid rgba(255,255,255,.08)}
-.row{display:flex;align-items:center;gap:10px}
-.icon{width:36px;height:36px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;display:grid;place-items:center}
-.btn{display:inline-block;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:10px 14px;border-radius:10px}
-.btn.primary{background:#38bdf8;color:#071018;font-weight:600;border:0}
-.list{display:grid;gap:10px}
-.item{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px}
-.item h4{font-size:16px}
-.item p{font-size:14px;color:#b7bfd3}
-.small{font-size:13px;color:#b7bfd3}
+/* Small rounded badge-like label element */
+.chip {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+}
+
+/* Sticky header with blur effect and border */
+header {
+    position: sticky;
+    top: 0;
+    background: rgba(14, 15, 18, 0.8);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 10;
+}
+
+/* Flex container for header brand and navigation */
+.bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+/* Branding section containing logo and text */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 18px;
+    transform: translateX(-60px);
+}
+
+/* Brand logo sizing */
+.brand img {
+    height: 28px;
+    width: 28px;
+}
+
+/* Keep brand name in one line */
+.brand span {
+    white-space: nowrap;
+    margin-right: 8px;
+}
+
+/* Navigation bar layout and spacing */
+nav {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 22px;
+}
+
+/* Navigation link styling */
+nav a {
+    display: inline-block;
+    padding: 10px 14px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+/* Hover effect for navigation links */
+nav a:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Active link style in header */
+nav a.active {
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+/* Submit button styling inside nav */
+nav .btn {
+    margin-left: 12px;
+}
+
+/* Keeps the Submit button aligned visually */
+nav .btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 48px 0;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 36px;
+}
+
+.hero p {
+    color: #b7bfd3;
+}
+
+/* Search bar container in hero */
+.search {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 12px;
+    width: 400px;
+}
+
+.search input {
+    width: 100%;
+    max-width: 520px;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #f5f7fb;
+}
+
+.search button {
+    padding: 12px 16px;
+    border: 0;
+    border-radius: 10px;
+    background: #38bdf8;
+    color: #071018;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.grid {
+    display: grid;
+    gap: 16px;
+}
+
+.grid.auto {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.card h3 {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.card p {
+    color: #b7bfd3;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+section {
+    padding: 28px 0;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.section-title h2 {
+    font-size: 20px;
+}
+
+.link {
+    font-size: 14px;
+    color: #7ad7ff;
+}
+
+footer {
+    margin-top: 32px;
+    padding: 24px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+}
+
+.btn {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 10px 14px;
+    border-radius: 10px;
+}
+
+.btn.primary {
+    background: #38bdf8;
+    color: #071018;
+    font-weight: 600;
+    border: 0;
+}
+
+.list {
+    display: grid;
+    gap: 10px;
+}
+
+.item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.item h4 {
+    font-size: 16px;
+}
+
+.item p {
+    font-size: 14px;
+    color: #b7bfd3;
+}
+
+/* Small text styling for subtle details */
+.small {
+    font-size: 13px;
+    color: #b7bfd3;
+}
+
+.row.between {
+    justify-content: space-between;
+}
+
+.row.align {
+    align-items: center;
+}
+
+.mb {
+    margin-bottom: 20px;
+}
+
+.mb-lg {
+    margin-bottom: 18px;
+}
+
+.mt {
+    margin-top: 14px;
+}
+
+.center {
+    text-align: center;
+}
+
+.auth {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.auth-card {
+    background: #1c1f24;
+    color: #f5f7fb;
+    width: 100%;
+    max-width: 440px;
+    padding: 28px;
+    border-radius: 18px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+.auth-card h1 {
+    font-size: 30px;
+    line-height: 1.1;
+    margin-bottom: 6px;
+    color: #f2f2f2;
+}
+
+.auth-card .muted {
+    color: #5a5b5e;
+}
+
+.auth-card h1 {
+    margin-bottom: 10px;
+}
+
+.helper {
+    font-size: 12px; color: #64748b;
+}
+
+.pw-row {
+    display:flex; gap:10px;
+}
+
+.pw-row .input-group {
+    flex:1;
+}
+
+.terms {
+    font-size: 14px;
+    color: #0f172a;
+}
+
+.strength {
+    height: 6px;
+    border-radius: 4px;
+    background: #e5e7eb;
+    overflow: hidden;
+}
+
+.strength > span {
+    display:block;
+    height:100%;
+    width:0%;
+    background:#38bdf8;
+    transition: width .25s ease;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.input-group label {
+    font-weight: 600;
+    color: #b7bfd3;
+}
+
+.input-group input {
+    padding: 12px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    font-size: 15px;
+    outline: none;
+    color: #f5f7fb;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.input-group input::placeholder {
+    color: #94a3b8;
+}
+
+.input-group input:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+}
+
+/* Checkbox and links */
+.checkbox {
+    display: flex;
+    gap: 8px;
+    font-size: 14px;
+    align-items: center;
+    user-select: none;
+    color: #b7bfd3;
+}
+
+.link {
+    color: #38bdf8;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+/* Errors for form validation */
+.error {
+    color: #d93025;
+    font-size: 12px;
+    min-height: 14px;
+}
+
+/* Buttons inside auth pages */
+.btn.primary.full {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    background: #38bdf8;
+    color: #071018;
+    border: 0;
+}
+
+.btn.primary.full:hover {
+    filter: brightness(0.95);
+}
+
+/* password + confirm row */
+.pw-row {
+    display: flex;
+    gap: 10px;
+}
+
+/* let each column shrink inside the row */
+.pw-row .input-group {
+    flex: 1 1 0;
+    min-width: 0;      /* THIS prevents overflow */
+}
+
+/* make the input fill its column */
+.pw-row .input-group input {
+    width: 100%;
+}
+
+/* optional: stack on very small screens */
+@media (max-width: 520px) {
+    .pw-row { flex-direction: column; }
+}
+
+
+@media (max-width: 900px) {
+    .bar {
+        flex-wrap: wrap;
+    }
+
+    nav {
+        width: 100%;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    nav a {
+        flex: 0 0 auto;
+    }
+
+    .brand {
+        transform: translateX(0);
+    }
+
+    .brand span {
+        font-size: 16px;
+    }
+}
+
+/* Recipe hero section — centers and contains the image */
+.recipe-hero {
+    margin: 24px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 16px;
+}
+
+/* Recipe photo — smaller, centered, and cleanly contained */
+.recipe-photo {
+    width: 35%;
+    max-width: 620px; /* smaller image cap */
+    height: auto;
+    display: block;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+    background: #0e0f12;
+    object-fit: cover;
+    margin: 0 auto;
+}
+
+/* Two-column layout for steps and ingredients */
+.grid.two {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 24px;
+    margin-top: 24px;
+    align-items: flex-start;
+}
+
+/* Responsive collapse on small screens */
+@media (max-width: 900px) {
+    .grid.two {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Ensure content inside cards stays properly padded */
+.card {
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+}
+
+/* Header inside cards */
+.card h3 {
+    margin-bottom: 8px;
+}
+
+/* Lists inside cards */
+ol,
+ul {
+    color: #f5f7fb;
+    line-height: 1.6;
+    margin-top: 8px;
+    padding-left: 20px;
+}
+
+/* Ingredient chips */
+.chip {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: #f5f7fb;
+    margin-right: 6px;
+}
+
+/* Step list item spacing */
+ol li {
+    margin-bottom: 6px;
+}
+
+/* Hover animation on image */
+.recipe-photo:hover {
+    transform: scale(1.005);
+    transition: 0.25s ease-in-out;
+}
 
 .pantry-container {
   display: grid;

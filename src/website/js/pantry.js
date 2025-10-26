@@ -672,7 +672,7 @@ async function loadPantry() {
                 type: 'info',
                 confirmText: 'Go to Login',
                 onConfirm: () => {
-                    window.location.href = 'index.html';
+                    window.location.href = 'Login.html';
                 }
             });
         } else {

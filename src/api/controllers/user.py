@@ -69,12 +69,20 @@ def delete(db: Session, user_id: int) -> bool:
 
 
 def authenticate_user(db: Session, username: str, password: str) -> Optional[User]:
-	"""Verify username/password and return the user on success, otherwise False/None."""
+	"""Verify username/email and password and return the user on success, otherwise None.
+
+	The username parameter can be either a username or an email address.
+	"""
 	user = read_user_by_username(db, username)
 	if not user:
+		user = read_user_by_email(db, username)
+
+	if not user:
 		return None
+
 	if not pwd_context.verify(password, user.hashed_password):
 		return None
+
 	return user
 
 

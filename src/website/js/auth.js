@@ -127,7 +127,7 @@ async function login(username, password) {
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.detail || 'Login failed');
+            throw new Error(JSON.stringify(error));
         }
 
         const data = await response.json();
@@ -174,7 +174,7 @@ async function register(username, email, password) {
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.detail || 'Registration failed');
+            throw new Error(JSON.stringify(error));
         }
 
         return await response.json();

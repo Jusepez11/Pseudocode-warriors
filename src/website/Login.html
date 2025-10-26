@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Search • What Can We Cook</title>
+  <title>Login • What Can We Cook</title>
   <link rel="icon" type="image/png" href="image/favicon.png" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/stylesheet.css" />
@@ -22,29 +22,37 @@
         <a href="Favorites.html">Favorites</a>
         <a href="MyPantry.html">My Pantry</a>
         <a href="Community.html">Community</a>
+        <a href="Login.html">Login</a>
+        <a href="Signup.html">Sign Up</a>
         <a href="SubmitRecipe.html" class="btn">Submit</a>
       </nav>
     </div>
   </header>
-
   <main class="wrap">
-    
-<section class="hero">
-  <h1>Search</h1>
-  <p class="muted">Type a word and press the button (no real search here).</p>
-  <div class="search">
-    <input type="text" placeholder="e.g., chicken, pasta, oats" />
-    <button type="button">Search</button>
-  </div>
-</section>
-<section>
-  <div class="section-title"><h2>Example results</h2></div>
-  <div class="grid auto">
-    <a class="card" href="RecipeDetail.html"><img src="image/recipes.png" alt=""><h3>Chicken Rice Bowl</h3><p class="muted">30 min</p></a>
-    <a class="card" href="RecipeDetail.html"><img src="image/recipes.png" alt=""><h3>Tomato Pasta</h3><p class="muted">20 min</p></a>
-  </div>
-</section>
+    <section class="auth">
+      <div class="auth-card">
+        <h1>Welcome back</h1>
+        <p class="muted mb">Sign in to save favorites and manage your pantry.</p>
 
+        <form id="loginForm" action="index.html" method="POST" novalidate>
+          <div class="input-group">
+            <label for="email">Email or Username</label>
+            <input type="text" id="email" name="email" placeholder="username or email@example.com" />
+            <small class="error" id="emailError" aria-live="polite"></small>
+          </div>
+
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Your password" />
+            <small class="error" id="passwordError" aria-live="polite"></small>
+          </div>
+
+          <button type="submit" class="btn primary full">Sign In</button>
+
+          <p class="muted center mt">Don't have an account? <a class="link" href="Signup.html">Sign up</a></p>
+        </form>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -56,5 +64,8 @@
       </div>
     </div>
   </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/login.js"></script>
 </body>
 </html>
