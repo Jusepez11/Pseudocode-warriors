@@ -7,7 +7,7 @@ sqlalchemy
 httpx
 pytest
 pytest-dependency
-passlib
+passlib[bcrypt]
 python-jose[cryptography]
 python-multipart
 fuzzywuzzy

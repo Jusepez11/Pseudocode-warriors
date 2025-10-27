@@ -39,7 +39,7 @@ def test_update_ingredient(client, test_seed_data, authenticate_demo_user):
 
 def test_delete_ingredient(client, test_seed_data, authenticate_demo_user):
 	response = client.delete(f"/ingredient/1", headers=authenticate_demo_user)
-	assert response.status_code == 200
+	assert response.status_code == 204
 
 	response = client.get(f"/ingredient/1")
 	assert response.status_code == 404
