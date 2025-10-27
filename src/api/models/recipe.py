@@ -14,6 +14,7 @@ class Recipe(Base):
 	ingredient_id_list = Column(String, nullable=False)  # Comma-separated list of ingredient IDs
 	servings = Column(Integer, nullable=False)
 	video_embed_url = Column(String, nullable=True)
+	image_url = Column(String, nullable=True)
 	created_at = Column(DateTime, default=func.now())
 	updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 

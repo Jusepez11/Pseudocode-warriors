@@ -10,34 +10,152 @@ def seed_if_needed():
 	db = SessionLocal()
 
 	if db.query(Ingredient).count() == 0:
-		bacon = Ingredient(name="Bacon")
-		lamb = Ingredient(name="Lamb")
-		mayo = Ingredient(name="Mayonnaise")
-		ciabatta = Ingredient(name="Ciabatta")
-		lentils = Ingredient(name="French Lentils")
-		db.add_all([bacon, lamb, mayo, ciabatta, lentils])
+		ingredients = [
+			Ingredient(id=1, name="Bacon"),
+			Ingredient(id=2, name="Lamb"),
+			Ingredient(id=3, name="Mayonnaise"),
+			Ingredient(id=4, name="Ciabatta"),
+			Ingredient(id=5, name="French Lentils"),
+			Ingredient(id=6, name="Leek"),
+			Ingredient(id=7, name="Butter"),
+			Ingredient(id=8, name="Cheese"),
+			Ingredient(id=9, name="Potatoes"),
+			Ingredient(id=10, name="Lettuce"),
+		]
+
+		db.add_all(ingredients)
 		db.commit()
 
 	if db.query(Recipe).count() == 0:
 		kapsalon = Recipe(
+			id=1,
 			title="Kapsalon",
 			description="Dutch dish made with fries, lamb, and salad, topped with garlic sauce.",
-			instructions="Cut the meat into strips. Fry until ready. Bake fries until golden brown...",
-			ingredient_id_list="1,2,3,4",
+			instructions=(
+				"1. Cut the meat into thin strips.\n"
+				"2. Heat a drizzle of oil in a pan and fry the meat for about 6 minutes until cooked through.\n"
+				"3. Bake or deep-fry the fries until golden brown and crisp.\n"
+				"4. Spread the fries in a baking dish, add the fried meat in an even layer.\n"
+				"5. Sprinkle grated cheese over the meat and place under a hot grill or in the oven until the cheese melts.\n"
+				"6. Chop lettuce, tomato and cucumber; toss to make a simple salad.\n"
+				"7. Spoon the salad over the baked dish, drizzle with garlic sauce and hot sauce, then serve immediately."
+			),
+			ingredient_id_list="2,8,9,10,3",
 			servings=1,
 			video_embed_url="https://www.youtube.com/embed/UIcuiU1kV8I",
+			image_url="https://www.themealdb.com/images/media/meals/sxysrt1468240488.jpg"
 		)
 
 		flamiche = Recipe(
+			id=2,
 			title="Flamiche",
 			description="French leek tart with a buttery crust.",
-			instructions="Prepare pastry, cook leeks until soft, fill tart case, and bake until golden.",
-			ingredient_id_list="3,5",
-			servings=1,
+			instructions=(
+				"1. Prepare shortcrust pastry and line a 23cm flan tin; chill.\n"
+				"2. Blind bake the pastry base until lightly golden.\n"
+				"3. Melt butter in a pan, add sliced leeks and salt; cover and soften for about 10 minutes.\n"
+				"4. Beat crème fraîche with eggs and nutmeg; season, then fold in the cooked leeks.\n"
+				"5. Pour the leek mixture into the pastry shell and bake at 190°C for about 35-40 minutes until set and golden.\n"
+				"6. Let rest for 10 minutes, then remove from tin and serve warm."
+			),
+			ingredient_id_list="6,7,8",
+			servings=4,
 			video_embed_url="https://www.youtube.com/embed/vT0q5c880Rg",
+			image_url="https://www.themealdb.com/images/media/meals/wssvvs1511785879.jpg"
 		)
 
-		db.add_all([kapsalon, flamiche])
+		bacon_ciabatta = Recipe(
+			id=3,
+			title="Bacon Ciabatta Sandwich",
+			description="Crispy bacon with mayonnaise on toasted ciabatta.",
+			instructions=(
+				"1. Preheat a pan and fry bacon slices until crispy; drain on paper towel.\n"
+				"2. Slice the ciabatta roll and lightly toast until golden.\n"
+				"3. Spread mayonnaise on both halves of the ciabatta.\n"
+				"4. Layer the bacon on the bottom half, add lettuce if desired, then top with the ciabatta lid.\n"
+				"5. Slice in half and serve while warm."
+			),
+			ingredient_id_list="1,3,4,10",
+			servings=1,
+			video_embed_url="",
+			image_url="https://www.themealdb.com/images/media/meals/hpusuv1511812960.jpg",
+		)
+
+		lentil_salad = Recipe(
+			id=4,
+			title="French Lentil Salad",
+			description="Warm French lentils tossed with shallot vinaigrette.",
+			instructions=(
+				"1. Rinse lentils and place in a pot with water; bring to a boil then simmer until tender but not mushy (about 20-25 minutes).\n"
+				"2. Drain lentils and allow to cool slightly.\n"
+				"3. Whisk together olive oil, vinegar, minced shallot, salt, and pepper to make vinaigrette.\n"
+				"4. Toss the warm lentils with vinaigrette, add chopped herbs if available, and serve warm or at room temperature."
+			),
+			ingredient_id_list="5,7",
+			servings=2,
+			video_embed_url="",
+			image_url="https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg",
+		)
+
+		roast_lamb = Recipe(
+			id=5,
+			title="Simple Roast Lamb Chops",
+			description="Pan-roasted lamb loin chops with a simple seasoning.",
+			instructions=(
+				"1. Pat lamb loin chops dry and season with salt and pepper.\n"
+				"2. Heat a heavy skillet over medium-high heat with a splash of oil.\n"
+				"3. Sear the lamb chops 2-3 minutes per side until browned.\n"
+				"4. Finish in a preheated oven at 200°C for 5-8 minutes for medium, or longer for well done.\n"
+				"5. Rest the chops for 5 minutes before serving."
+			),
+			ingredient_id_list="2",
+			servings=2,
+			video_embed_url="",
+			image_url="https://www.themealdb.com/images/media/meals/1bsv1q1560459826.jpg",
+		)
+
+		cheesy_potatoes = Recipe(
+			id=6,
+			title="Cheesy Potato Bake",
+			description="Layered potatoes baked with cheese and butter until golden.",
+			instructions=(
+				"1. Preheat oven to 190°C. Slice potatoes thinly.\n"
+				"2. Butter a baking dish and arrange a layer of potato slices.\n"
+				"3. Sprinkle grated cheese and a little salt, then repeat layers until dish is filled.\n"
+				"4. Cover with foil and bake for 30-40 minutes, then remove foil and bake another 10 minutes until cheese is browned.\n"
+				"5. Let rest for 5 minutes, then serve as a side dish."
+			),
+			ingredient_id_list="9,8,7",
+			servings=4,
+			video_embed_url="",
+			image_url="https://www.themealdb.com/images/media/meals/rwuyqx1511383174.jpg",
+		)
+
+		garden_salad = Recipe(
+			id=7,
+			title="Quick Garden Salad",
+			description="Fresh lettuce salad with a light vinaigrette.",
+			instructions=(
+				"1. Chop lettuce and any additional salad veggies you have.\n"
+				"2. Whisk together olive oil, vinegar, salt, and pepper to taste.\n"
+				"3. Toss the veggies with the dressing right before serving to keep them crisp.\n"
+				"4. Optionally top with croutons or a sprinkle of cheese."
+			),
+			ingredient_id_list="10",
+			servings=2,
+			video_embed_url="",
+			image_url="https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg",
+		)
+
+		db.add_all([
+			kapsalon,
+			flamiche,
+			bacon_ciabatta,
+			lentil_salad,
+			roast_lamb,
+			cheesy_potatoes,
+			garden_salad,
+		])
 		db.commit()
 
 	if db.query(PantryIngredient).count() == 0:
