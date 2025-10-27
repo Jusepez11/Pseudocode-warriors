@@ -108,4 +108,3 @@ def authenticate_user(db: Session, username: str, password: str) -> Optional[Mod
 		return None
 
 	return user
-
