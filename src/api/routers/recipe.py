@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from src.api.controllers import recipe as controller
 from src.api.dependencies.database import get_db
 from src.api.schemas.recipe import RecipeCreate, RecipeUpdate, RecipeRead
-from src.api.util.auth import get_current_active_user
+from src.api.util.auth import get_current_active_user, get_current_active_admin_user
 
 router = APIRouter(prefix="/recipes", tags=["Recipes"])
 
@@ -39,6 +39,6 @@ def update(recipe_id: int, request: RecipeUpdate, db: Session = Depends(get_db))
 	return controller.update(db, recipe_id, request)
 
 
-@router.delete("/{recipe_id}", dependencies=[Depends(get_current_active_user)])
+@router.delete("/{recipe_id}", dependencies=[Depends(get_current_active_admin_user)])
 def delete(recipe_id: int, db: Session = Depends(get_db)):
 	return controller.delete(db, recipe_id)
