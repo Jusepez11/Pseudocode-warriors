@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from src.api.controllers import user as user_controller
 from src.api.dependencies.database import get_db
-from src.api.models.user import User as UserModel
+from src.api.models.user import User as UserModel, Role
 from src.api.schemas.user import User as UserSchema
 
 # Use a sensible default for development; production should set AUTH_SECRET_KEY.
@@ -83,4 +83,13 @@ async def get_current_active_user(current_user: UserSchema = Depends(get_current
 	"""Ensure the current user is active; otherwise raise HTTP 400."""
 	if not current_user.is_active:
 		raise HTTPException(status_code=400, detail="Inactive user")
+	return current_user
+
+
+async def get_current_active_admin_user(current_user: UserSchema = Depends(get_current_user)) -> UserSchema:
+	"""Ensure the current user is an active admin; otherwise raise HTTP 400."""
+	if not current_user.is_active:
+		raise HTTPException(status_code=400, detail="Inactive user")
+	if current_user.role != Role.Administrator:
+		raise HTTPException(status_code=403, detail="Insufficient privileges")
 	return current_user

@@ -1,5 +1,5 @@
 from src.api.dependencies.database import SessionLocal
-from src.api.models import User
+from src.api.models import User, Role
 from src.api.models.ingredient import Ingredient
 from src.api.models.recipe import Recipe
 from src.api.util.auth import pwd_context
@@ -44,6 +44,16 @@ def seed_if_needed():
 			username="test",
 			email="test@mail.com",
 			hashed_password=pwd_context.hash("testpassword")
+		)
+		db.add(test_user)
+		db.commit()
+
+	if db.query(User).filter(User.username == "testadmin").first() is None:
+		test_user = User(
+			username="testadmin",
+			email="testadmin@mail.com",
+			hashed_password=pwd_context.hash("testadminpassword"),
+			role=Role.Administrator
 		)
 		db.add(test_user)
 		db.commit()

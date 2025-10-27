@@ -36,21 +36,21 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
 
 @router.post("/register", response_model=User)
-async def register_user(user: UserCreate, db: Session = Depends(get_db)):
+async def register_user(request: UserCreate, db: Session = Depends(get_db)):
 	"""Register a new user if the username and email are not already taken.
 
 	Returns the newly created user's public data.
 	"""
 	# Check if user already exists
-	db_user = user_controller.read_user_by_username(db, username=user.username)
+	db_user = user_controller.read_user_by_username(db, username=request.username)
 	if db_user:
 		raise HTTPException(status_code=400, detail="Username already registered")
 
-	db_user = user_controller.read_user_by_email(db, email=user.email)
+	db_user = user_controller.read_user_by_email(db, email=request.email)
 	if db_user:
 		raise HTTPException(status_code=400, detail="Email already registered")
 
-	new_user = user_controller.create(db=db, user=user)
+	new_user = user_controller.create(db=db, request=request)
 	return User(
 		username=new_user.username,
 		email=new_user.email,

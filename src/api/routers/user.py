@@ -3,15 +3,15 @@ from sqlalchemy.orm import Session
 
 from src.api.controllers import user as controller
 from src.api.dependencies.database import get_db
-from src.api.schemas.user import UserCreate, UserUpdate, UserRead
-from src.api.util.auth import get_current_active_user
+from src.api.schemas.user import UserUpdate, UserRead
+from src.api.util.auth import get_current_active_user, get_current_active_admin_user
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.get("/{user_id}", response_model=UserRead)
 def read_one(user_id: int, db: Session = Depends(get_db)):
-	return controller.read_user_by_id(db, user_id)
+	return controller.read_one(db, user_id)
 
 
 @router.put("/{user_id}", response_model=UserRead, dependencies=[Depends(get_current_active_user)])
@@ -19,6 +19,6 @@ def update(user_id: int, request: UserUpdate, db: Session = Depends(get_db)):
 	return controller.update(db, user_id, request)
 
 
-@router.delete("/{user_id}", dependencies=[Depends(get_current_active_user)])
+@router.delete("/{user_id}", dependencies=[Depends(get_current_active_admin_user)])
 def delete(user_id: int, db: Session = Depends(get_db)):
 	return controller.delete(db, user_id)

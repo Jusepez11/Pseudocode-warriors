@@ -55,7 +55,6 @@ class UserUpdate(BaseModel):
 	username: Optional[str] = None
 	email: Optional[str] = None
 	is_active: Optional[bool] = None
-	role: Role = Role.User
 
 
 class UserRead(BaseModel):
