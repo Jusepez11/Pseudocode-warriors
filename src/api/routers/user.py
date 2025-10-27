@@ -9,11 +9,6 @@ from src.api.util.auth import get_current_active_user
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@router.post("/", response_model=UserRead)
-def create(request: UserCreate, db: Session = Depends(get_db)):
-	return controller.create(db, request)
-
-
 @router.get("/{user_id}", response_model=UserRead)
 def read_one(user_id: int, db: Session = Depends(get_db)):
 	return controller.read_user_by_id(db, user_id)
