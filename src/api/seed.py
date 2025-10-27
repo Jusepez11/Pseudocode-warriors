@@ -2,6 +2,7 @@ from src.api.dependencies.database import SessionLocal
 from src.api.models import User, Role
 from src.api.models.ingredient import Ingredient
 from src.api.models.recipe import Recipe
+from src.api.models.pantry_ingredient import PantryIngredient
 from src.api.util.auth import pwd_context
 
 
@@ -37,6 +38,16 @@ def seed_if_needed():
 		)
 
 		db.add_all([kapsalon, flamiche])
+		db.commit()
+
+	if db.query(PantryIngredient).count() == 0:
+		pantry1 = PantryIngredient(
+			user_id=1,
+			ingredient_id=1,
+			quantity="Two",
+			unit="kgs"
+		)
+		db.add(pantry1)
 		db.commit()
 
 	if db.query(User).filter(User.username == "test").first() is None:
