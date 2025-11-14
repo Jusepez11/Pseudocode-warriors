@@ -1,5 +1,3 @@
-const API_BASE_URL = 'http://localhost:8000';
-
 /**
  * Get URL parameter by name
  * @param {string} name - Parameter name
@@ -43,6 +41,35 @@ async function fetchCategory(categoryId) {
     } catch (error) {
         console.error(`Error fetching category ${categoryId}:`, error);
         return {id: categoryId, name: 'Unknown category'};
+    }
+}
+
+/**
+ * Fetch user's pantry ingredients
+ * @returns {Promise<Array|null>} - Array of pantry ingredients with ingredient details, or null if not authenticated
+ */
+async function fetchUserPantry() {
+    try {
+        const authenticated = await isAuthenticated();
+        if (!authenticated) {
+            return null;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/pantryingredient/pantry`, {
+            headers: getAuthHeaders()
+        });
+
+        if (!response.ok) {
+            if (response.status === 401) {
+                return null;
+            }
+            throw new Error(`Failed to fetch pantry: ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching user pantry:', error);
+        return null;
     }
 }
 
@@ -101,6 +128,17 @@ async function displayRecipe(recipe) {
         categoryIds.map(id => fetchCategory(parseInt(id)))
     );
 
+    // Fetch user's pantry to check which ingredients they have
+    const userPantry = await fetchUserPantry();
+
+    // Create a set of ingredient IDs that the user has in their pantry
+    const pantryIngredientIds = new Set();
+    if (userPantry) {
+        userPantry.forEach(item => {
+            pantryIngredientIds.add(item.ingredient_id);
+        });
+    }
+
     // Update hero section with categories
     const heroSection = document.querySelector('.hero');
     const servingsInfo = recipe.servings ? `Serves ${recipe.servings}` : '';
@@ -146,15 +184,58 @@ async function displayRecipe(recipe) {
         </div>
     `;
 
-    // Add ingredients column
-    contentHtml += `
-        <aside class="card">
-            <h3>Ingredients</h3>
-            <ul style="margin-top:8px;padding-left:18px">
-                ${ingredients.map(ing => `<li>${ing.name}</li>`).join('\n                ')}
-            </ul>
-        </aside>
-    `;
+    // Build ingredients list with pantry status
+    let ingredientsHtml = '';
+    let missingCount = 0;
+
+    if (userPantry !== null) {
+        // User is logged in - show pantry status
+        ingredientsHtml = ingredients.map(ing => {
+            const hasIngredient = pantryIngredientIds.has(ing.id);
+            if (!hasIngredient) {
+                missingCount++;
+            }
+            const color = hasIngredient ? '#10b981' : '#ef4444';
+            const icon = hasIngredient ? '✓' : '✗';
+            return `<li style="color: ${color};">
+                <span style="font-weight: 600; margin-right: 4px;">${icon}</span>
+                ${ing.name}
+            </li>`;
+        }).join('\n                ');
+
+        // Add status message
+        const statusMessage = missingCount === 0
+            ? `<p style="color: #10b981; font-size: 14px; margin-top: 12px;">✓ You have all ingredients in your pantry!</p>`
+            : `<p style="color: #ef4444; font-size: 14px; margin-top: 12px;">✗ You are missing ${missingCount} ingredient${missingCount !== 1 ? 's' : ''} from your pantry</p>`;
+
+        contentHtml += `
+            <aside class="card">
+                <h3>Ingredients</h3>
+                ${statusMessage}
+                <ul style="margin-top:8px;padding-left:18px">
+                    ${ingredientsHtml}
+                </ul>
+                <p style="font-size: 12px; color: #888; margin-top: 12px;">
+                    <a href="MyPantry.html" style="color: #3b82f6; text-decoration: none;">Manage your pantry</a>
+                </p>
+            </aside>
+        `;
+    } else {
+        // User not logged in - show regular list
+        ingredientsHtml = ingredients.map(ing => `<li>${ing.name}</li>`).join('\n                ');
+
+        contentHtml += `
+            <aside class="card">
+                <h3>Ingredients</h3>
+                <ul style="margin-top:8px;padding-left:18px">
+                    ${ingredientsHtml}
+                </ul>
+                <p style="font-size: 12px; color: #888; margin-top: 12px;">
+                    <a href="Login.html" style="color: #3b82f6; text-decoration: none;">Log in</a> to check your pantry
+                </p>
+            </aside>
+        `;
+    }
 
     // Add video column if video exists
     if (hasVideo) {
