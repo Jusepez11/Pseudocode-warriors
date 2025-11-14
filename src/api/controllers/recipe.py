@@ -10,8 +10,9 @@ from src.api.models.recipe import Recipe as Model
 
 
 def create(db: Session, request):
+	'''
 	if not request.id:
-		request.id = None
+		request.id = None'''
 
 	new_item = Model(
 		title=request.title,
@@ -19,7 +20,8 @@ def create(db: Session, request):
 		instructions=request.instructions,
 		ingredient_id_list=request.ingredient_id_list,
 		servings=request.servings,
-		video_embed_url=request.video_embed_url
+		video_embed_url=request.video_embed_url,
+        image_url=request.image_url,
 	)
 
 	try:
@@ -29,6 +31,7 @@ def create(db: Session, request):
 	except SQLAlchemyError as e:
 		error = str(e.__dict__['orig'])
 		raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+	return new_item
 
 
 def read_recent(db: Session, limit: int = 10) -> List[type[Model]]:
