@@ -667,27 +667,15 @@ async function loadPantry() {
         renderPantryTable(pantryItems);
     } catch (error) {
         console.error('Error loading pantry:', error);
-        if (error.message === 'Unauthorized') {
-            showModal({
-                title: 'Authentication Required',
-                message: 'Please log in to view your pantry.',
-                type: 'info',
-                confirmText: 'Go to Login',
-                onConfirm: () => {
-                    window.location.href = 'Login.html';
-                }
-            });
-        } else {
-            showToast('Failed to load pantry. Please make sure the API server is running.', 'error');
-        }
+        showToast('Failed to load pantry. Please make sure the API server is running.', 'error');
     }
 }
 
 /**
  * Initialize pantry page
  */
-function initializePantryPage() {
-    if (!requireAuth()) {
+async function initializePantryPage() {
+    if (!await requireAuth()) {
         return;
     }
 

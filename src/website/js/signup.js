@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const signupForm = document.getElementById('signupForm');
     const usernameInput = document.getElementById('username');
     const emailInput = document.getElementById('email');
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmError = document.getElementById('confirmError');
 
     // Check if already logged in
-    if (isAuthenticated()) {
+    if (await isAuthenticated()) {
         window.location.href = 'index.html';
         return;
     }

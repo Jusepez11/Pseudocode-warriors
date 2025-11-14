@@ -171,10 +171,10 @@ async function handleSubmitRecipeClick(event) {
  *  - Ensure user is authenticated
  *  - Hook up click handler for the submit button
  */
-function initSubmitRecipePage() {
+async function initSubmitRecipePage() {
     // Use same auth guard as pantry page, if available
     if (typeof requireAuth === "function") {
-        if (!requireAuth()) {
+        if (!await requireAuth()) {
             return;
         }
     }

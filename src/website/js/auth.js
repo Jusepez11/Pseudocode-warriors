@@ -39,35 +39,52 @@ function getAuthHeaders() {
 }
 
 /**
- * Check if user is authenticated
- * @returns {boolean} - True if authenticated
+ * Check if user is authenticated by validating token with backend
+ * @returns {Promise<boolean>} - True if authenticated with valid token
  */
-function isAuthenticated() {
+async function isAuthenticated() {
+    const token = getAccessToken();
+    if (!token) {
+        return false;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/auth/me`, {
+            headers: getAuthHeaders()
+        });
+
+        if (!response.ok) {
+            // Token is invalid or expired, remove it
+            removeAccessToken();
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Error validating authentication:', error);
+        // On network error, assume not authenticated to be safe
+        return false;
+    }
+}
+
+/**
+ * Check if user has a token (fast, synchronous check)
+ * Use this for quick checks where you don't need backend validation
+ * @returns {boolean} - True if token exists in storage
+ */
+function hasToken() {
     return getAccessToken() !== null;
 }
 
 /**
  * Redirect to login page if not authenticated
- * Note: This function uses showModal which should be defined in the calling script
- * @returns {boolean} - True if authenticated, false otherwise
+ * @returns {Promise<boolean>} - True if authenticated, false otherwise
  */
-function requireAuth() {
-    if (!isAuthenticated()) {
-        if (typeof showModal === 'function') {
-            showModal({
-                title: 'Authentication Required',
-                message: 'Please log in to access this page.',
-                type: 'info',
-                confirmText: 'Go to Login',
-                onConfirm: () => {
-                    window.location.href = 'index.html';
-                }
-            });
-        } else {
-            // Fallback if modal system not available
-            alert('Please log in to access this page.');
-            window.location.href = 'index.html';
-        }
+async function requireAuth() {
+    const authenticated = await isAuthenticated();
+    if (!authenticated) {
+        // Redirect to login page
+        window.location.href = 'Login.html';
         return false;
     }
     return true;
