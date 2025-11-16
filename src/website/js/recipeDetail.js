@@ -245,7 +245,8 @@ async function displayRecipe(recipe) {
                 <div style="margin-top:12px; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
                     <iframe 
                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 8px;"
-                        src="${recipe.video_embed_url}" 
+                        src="${recipe.video_embed_url}"
+                        referrerpolicy="strict-origin-when-cross-origin"
                         title="${recipe.title} video"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                         allowfullscreen>
