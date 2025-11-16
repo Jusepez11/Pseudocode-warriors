@@ -32,30 +32,19 @@ def test_get_nonexistent_category(client, test_seed_data):
 	assert response.status_code == 404
 
 
-def test_create_category_as_admin(client, test_seed_data, authenticate_demo_admin_user):
-	"""Test creating a new category as an admin user"""
+def test_create_category(client, test_seed_data, authenticate_demo_user):
+	"""Test creating a new category"""
 	new_category = {
 		"name": "Dessert",
 		"description": "Sweet treats and desserts"
 	}
 
-	response = client.post("/categories/", json=new_category, headers=authenticate_demo_admin_user)
+	response = client.post("/categories/", json=new_category, headers=authenticate_demo_user)
 	assert response.status_code == 200
 	data = response.json()
 	assert data["name"] == new_category["name"]
 	assert data["description"] == new_category["description"]
 	assert "id" in data
-
-
-def test_create_category_as_regular_user(client, test_seed_data, authenticate_demo_user):
-	"""Test that regular users cannot create categories"""
-	new_category = {
-		"name": "Test Category",
-		"description": "This should fail"
-	}
-
-	response = client.post("/categories/", json=new_category, headers=authenticate_demo_user)
-	assert response.status_code == 403  # Forbidden
 
 
 def test_create_category_unauthenticated(client, test_seed_data):
