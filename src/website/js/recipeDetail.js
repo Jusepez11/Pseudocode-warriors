@@ -212,6 +212,7 @@ async function displayRecipe(recipe) {
             <aside class="card">
                 <h3>Ingredients</h3>
                 ${statusMessage}
+                <button id="downloadIngredientsPdf" class="btn btn-download" style="margin-top:8px">Download PDF</button>
                 <ul style="margin-top:8px;padding-left:18px">
                     ${ingredientsHtml}
                 </ul>
@@ -227,6 +228,7 @@ async function displayRecipe(recipe) {
         contentHtml += `
             <aside class="card">
                 <h3>Ingredients</h3>
+                <button id="downloadIngredientsPdf" class="btn btn-download" style="margin-top:8px">Download PDF</button>
                 <ul style="margin-top:8px;padding-left:18px">
                     ${ingredientsHtml}
                 </ul>
@@ -257,6 +259,130 @@ async function displayRecipe(recipe) {
     }
 
     contentSection.innerHTML = contentHtml;
+    // Attach PDF download handler (if button exists)
+    const downloadBtn = document.getElementById('downloadIngredientsPdf');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', () => {
+            // pantryIngredientIds is a Set when userPantry exists, otherwise empty/undefined
+            const pantrySet = (userPantry ? pantryIngredientIds : null);
+            generateIngredientsPDF(recipe.title, ingredients, pantrySet);
+        });
+    }
+}
+
+/**
+ * Generate a simple PDF listing ingredients and marking missing ones.
+ * @param {string} recipeTitle
+ * @param {Array<object>} ingredients
+ * @param {Set<number>|null} pantryIds - Set of ingredient ids the user has, or null if unknown
+ */
+function generateIngredientsPDF(recipeTitle, ingredients, pantryIds) {
+    try {
+        // Support jspdf UMD export or global jsPDF
+        let jsPDFCtor = null;
+        if (window.jspdf && window.jspdf.jsPDF) {
+            jsPDFCtor = window.jspdf.jsPDF;
+        } else if (window.jsPDF) {
+            jsPDFCtor = window.jsPDF;
+        }
+        if (!jsPDFCtor) {
+            alert('PDF library not available.');
+            return;
+        }
+
+        // Create a receipt-style PDF
+        const doc = new jsPDFCtor({ unit: 'pt', format: 'letter' });
+        // Use monospace font for receipt look where available
+        //try { doc.setFont('helvetica', 'normal'); } catch (e) {}
+        try { doc.setFont('courier'); } catch (e) {}
+
+        const startX = 40;
+        let y = 40;
+
+        // Header (centered brand)
+        doc.setFontSize(14);
+        doc.setTextColor(34,34,34);
+        const title = recipeTitle || 'Ingredients';
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const centerX = pageWidth / 2;
+        doc.setTextColor(0);
+        doc.text(title, centerX, y, { align: 'center' });
+        y += 18;
+
+        // Sub header small
+        doc.setFontSize(9);
+        const now = new Date();
+        doc.text(`Generated: ${now.toLocaleString()}`, centerX, y, { align: 'center' });
+        y += 16;
+
+        // Separator line
+        doc.setDrawColor(180);
+        doc.setLineWidth(0.5);
+        doc.line(startX, y, pageWidth - startX, y);
+        y += 14;
+
+        // Column headers
+        doc.setFontSize(10);
+        doc.text('Item', startX, y);
+        doc.text('Have?', pageWidth - startX - 40, y);
+        y += 12;
+
+        doc.setLineWidth(0.25);
+        doc.line(startX, y, pageWidth - startX, y);
+        y += 12;
+
+        // List ingredients
+        const lineHeight = 14;
+        let missingCount = 0;
+        ingredients.forEach((ing) => {
+            if (y > doc.internal.pageSize.getHeight() - 60) {
+                doc.addPage();
+                y = 40;
+            }
+            const has = pantryIds ? pantryIds.has(ing.id) : null;
+            // Item name
+            doc.setFontSize(10);
+            doc.setTextColor(0);
+            const name = typeof ing.name === 'string' ? ing.name : (ing.name || 'Unknown');
+            // wrap long names if needed
+            const maxWidth = pageWidth - startX * 2 - 70;
+            const split = doc.splitTextToSize(name, maxWidth);
+            doc.text(split, startX, y);
+
+            // Have / Missing marker with colored text
+            const markerX = pageWidth - startX - 40;
+            if (has === true) {
+                doc.setTextColor(16,185,129); // green
+                doc.text("Have", markerX, y);
+            } else if (has === false) {
+                doc.setTextColor(239,68,68); // red
+                doc.text("Missing", markerX, y);
+                missingCount += 1;
+            } else {
+                doc.setTextColor(100,100,100); // gray
+                doc.text("Unknown", markerX, y);
+            }
+
+            y += lineHeight * Math.max(1, split.length);
+        });
+
+        // Footer summary
+        y += 8;
+        doc.setDrawColor(180);
+        doc.line(startX, y, pageWidth - startX, y);
+        y += 14;
+        doc.setFontSize(10);
+        doc.setTextColor(0);
+        const total = ingredients.length;
+        doc.text(`Total items: ${total}`, startX, y);
+        doc.text(`Missing: ${missingCount}`, pageWidth - startX - 100, y);
+
+        const safeTitle = recipeTitle ? recipeTitle.replace(/[^a-z0-9\-_ ]/gi, '') : 'ingredients';
+        doc.save(`${safeTitle}-ingredients.pdf`);
+    } catch (err) {
+        console.error('Error generating PDF', err);
+        alert('Unable to generate PDF.');
+    }
 }
 
 /**

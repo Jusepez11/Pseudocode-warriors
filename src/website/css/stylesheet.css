@@ -652,6 +652,33 @@ ol li {
     background: #dc2626;
 }
 
+/* Download PDF button: visually consistent and prominent */
+.btn-download {
+    display: inline-block;
+    background: #0ea5ff; /* slightly deeper, still site-primary family */
+    color: #ffffff; /* white text for more contrast */
+    border: 0;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    box-shadow: 0 6px 18px rgba(14,165,255,0.16);
+    transition: transform .08s ease, box-shadow .08s ease, background .12s ease;
+}
+.btn-download:hover {
+    background: #0891b2;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 26px rgba(8,145,178,0.18);
+}
+.btn-download:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 14px rgba(8,145,178,0.14);
+}
+.btn-download:focus {
+    outline: 3px solid rgba(56,189,248,0.18);
+}
+
 .form-row {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr auto;
