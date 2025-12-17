@@ -1,4 +1,5 @@
 # What-Can-We-Cook (ITIS-3300 Project)
+![Homepage](img/homepage.png "Homepage")
 Group information available in the [GROUP-INFO](./GROUP-INFO) file.
 
 ## Repository Structure
@@ -9,9 +10,10 @@ Group information available in the [GROUP-INFO](./GROUP-INFO) file.
 
 
 ### Installing necessary packages:  
-* `pip install -r requirements.txt`
+`pip install -r requirements.txt`
 
 ### Run the server:
+
 `python ./run.py`
 
 ### Test API by built-in docs:
@@ -20,3 +22,7 @@ Group information available in the [GROUP-INFO](./GROUP-INFO) file.
 ### Development Notes
 Please format your code before each commit by right-clicking the project folder and selecting `Reformat Code`.
 Set your IDE to use Tabs (width of 4).
+
+### Tests
+To run the tests just run the following command\
+`pytest src/api/tests/`
